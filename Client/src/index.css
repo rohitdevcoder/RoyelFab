@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+*{
+    font-family: "Questrial", sans-serif;
+}
+@theme {
+  --color-primary: #08289D;
+  --color-secondary: #063BFF;
+  --color-darkBg: #030712;
+}
+
+.blackOverlay{
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.animate-scroll{
+  animation: scroll-left 10s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media screen and (min-width: 762px) and (max-width: 790px) {
+.nextScreen{
+  font-size: 20px;
+  margin-top: 10px;
+}
+}
