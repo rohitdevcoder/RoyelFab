@@ -7,6 +7,7 @@ import adminRouter from './route/adminRouter.js';
 import productRouter from './route/productRouter.js';
 import cors from 'cors'
 import formRouter from './route/formRouter.js';
+import orderRouter from './route/orderRouter.js';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -27,6 +28,7 @@ app.use('/api/user',userRouter)
 app.use('/api/admin',adminRouter)
 app.use('/api/product',productRouter)
 app.use('/api/form',formRouter)
+app.use('/api/order',orderRouter)
 
 app.listen(port,()=>{
     console.log(`Api is working on http://localhost:${port}`);
