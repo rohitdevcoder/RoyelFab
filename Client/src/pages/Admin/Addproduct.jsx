@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { Assets } from '../../assets/Asset';
+import toast from 'react-hot-toast';
+import { useAppContext } from '../../context/AppContext';
 
 function Addproduct() {
-
+  
+  const {axios} = useAppContext();
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -24,11 +27,33 @@ function Addproduct() {
 ]
 
 const onSubmitHandeler = async (e) =>{
+
+  try {
   e.preventDefault();
+  const productData = {
+    name,
+    description,
+    category
+  }
+ const formData = new FormData();
+formData.append('productData', JSON.stringify(productData));
+for (let i = 0; i < files.length; i++) {
+  formData.append('images',files[i]);
+}
+const {data} = await axios.post('/api/product/add',formData)
+if(data.success){
+  toast.success(data.message || 'Product added successfully');
   setCategory('');
   setDescription('');
   setName('');
   setFiles([]);
+}else{
+  toast.error(data.message || 'Unable to add product');
+}
+
+  } catch (error) {
+    toast.error(error.message);
+  }
 }
 
   return (
@@ -54,11 +79,11 @@ const onSubmitHandeler = async (e) =>{
         </div>
         <div>
           <p className='text-base font-semibold dark:text-white'>Product Name</p>
-          <input type="text" placeholder='Enter Product Name' onChange={(e)=>setName(e.target.value)} value={name} className='w-full rounded outline-primary px-3 py-2 mt-2 border border-gray-300 dark:placeholder:text-gray-200 dark:text-white dark:outline-secondary'/>
+          <input type="text" placeholder='Enter Product Name' onChange={(e)=>setName(e.target.value)} value={name} className='w-full rounded outline-primary px-3 py-2 mt-2 border border-gray-300 dark:placeholder:text-gray-200 dark:text-white dark:outline-secondary' required/>
         </div>
         <div>
           <p className='text-base font-semibold dark:text-white'>Product Description</p>
-          <textarea type="text" rows={4} placeholder='Enter Product Description' onChange={(e)=>setDescription(e.target.value)} value={description} className='w-full rounded outline-primary px-3 py-2 mt-2 border border-gray-300 dark:placeholder:text-gray-200 dark:text-white dark:outline-secondary'/>
+          <textarea type="text" rows={4} placeholder='Enter Product Description' onChange={(e)=>setDescription(e.target.value)} value={description} className='w-full rounded outline-primary px-3 py-2 mt-2 border border-gray-300 dark:placeholder:text-gray-200 dark:text-white dark:outline-secondary' required/>
         </div>
         <div className='w-full flex flex-col gap-3'>
           <label htmlFor="category" className='text-base font-semibold dark:text-white'>

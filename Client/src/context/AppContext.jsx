@@ -1,7 +1,11 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom"
 import { ProductDetails } from "../assets/Asset";
+import axios from "axios";
 
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 export const AppContext = createContext();
 
 export const AppContextProvider = ({children})=>{
@@ -9,8 +13,22 @@ export const AppContextProvider = ({children})=>{
   const [navActive,setNavActive] = useState('Home');
   const navigate = useNavigate();
   const [products,setProducts] = useState([])
-  const [isAdmin,setIsAdmin] = useState(true);
+  const [isAdmin,setIsAdmin] = useState(false);
   const [showLogin, setShowLogin] = useState(false)
+
+
+  const fetchAdmin = async ()=>{
+    try {
+      const {data} = await axios.get('/api/admin/is-auth');
+      if(data.success){
+        setIsAdmin(true);
+      }else{
+        setIsAdmin(false)
+      }
+    } catch (error) {
+      setIsAdmin(false);
+    }
+  }
 
 
   const fetchProducts = async() =>{
@@ -30,6 +48,10 @@ export const AppContextProvider = ({children})=>{
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   }
 
+  useEffect(()=>{
+    fetchAdmin();
+  })
+
   const value ={
        theme,
        ToggleTheme,
@@ -41,7 +63,8 @@ export const AppContextProvider = ({children})=>{
        isAdmin,
        setIsAdmin,
        showLogin,
-       setShowLogin
+       setShowLogin,
+       axios
   }
 
   //App context provider

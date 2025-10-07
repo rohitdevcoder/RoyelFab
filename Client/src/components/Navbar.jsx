@@ -15,7 +15,7 @@ function Navbar() {
     {name: 'Contact', link: '/contact'}
   ]
 
-  const {theme,ToggleTheme,navActive,setNavActive,navigate} =useAppContext();
+  const {theme,ToggleTheme,setShowLogin,navActive,setNavActive,navigate} =useAppContext();
   const [isOpen, setIsopen] = useState(false);
   // const [navActive,setNavActive] = useState('Home');
 
@@ -54,7 +54,7 @@ function Navbar() {
 
          <div className='flex items-center  flex-col gap-3'>
           <button className=' py-[10px] px-[20px] bg-primary text-white font-medium rounded cursor-pointer' onClick={()=>{navigate('/contact'),scrollTo(0,0),handleMobileMenu()}}>Request a service</button>
-          <button onClick={()=>{navigate('/login'),scrollTo(0,0),handleMobileMenu()}} className=' py-[10px] px-[20px] bg-primary text-white font-medium rounded cursor-pointer'>Admin Login</button>
+          <button onClick={()=>{setShowLogin(true),handleMobileMenu()}} className=' py-[10px] px-[20px] bg-primary text-white font-medium rounded cursor-pointer'>Admin Login</button>
          </div>
 
       </div>
@@ -79,7 +79,7 @@ function Navbar() {
            {theme === 'light' ?<MdDarkMode/> : <MdOutlineLightMode/> }
           </span>
           <button className='hidden sm:block py-[10px] px-[15px] md:px-[20px]   bg-primary text-white font-medium rounded cursor-pointer' onClick={()=>{navigate('/contact'),scrollTo(0,0)}}>Request a service</button>
-          <button onClick={()=>{navigate('/login'),scrollTo(0,0)}} className=' py-1 px-2 text-sm text-secondary border border-secondary font-medium rounded-4xl cursor-pointer hidden md:block'>Admin</button>
+          <button onClick={()=>{setShowLogin(true)}} className=' py-1 px-2 text-sm text-secondary border border-secondary font-medium rounded-4xl cursor-pointer hidden md:block'>Admin</button>
          <span onClick={handleMobileMenu} className='block md:hidden text-2xl dark:text-white cursor-pointer ml-3'>
            <HiMiniBars3CenterLeft />
          </span>

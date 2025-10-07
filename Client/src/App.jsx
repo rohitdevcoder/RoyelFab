@@ -32,8 +32,8 @@ function App() {
       <Route path='/client' element={<Client/>}/>
       <Route path='/contact' element={<Contact/>}/>
       <Route path='/products/:category/:id' element={<ProductDetailPage/>}/>
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/admin' element={isAdmin ? <Adminlayout/> : <Home/>}>
+      {/* <Route path='/login' element={<Login/>}/> */}
+      <Route path='/admin' element={isAdmin ? <Adminlayout/> : <Login/>}>
       <Route index element={isAdmin ?<Addproduct/>:null}/>
       <Route path='product-list' element={<ProductList/>}/>
       <Route path='order' element={<Order/>}/>

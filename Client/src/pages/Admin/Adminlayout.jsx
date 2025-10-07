@@ -5,10 +5,12 @@ import { MdOutlineAddBusiness } from "react-icons/md";
 import { IoList } from "react-icons/io5";
 import { GrBasket } from "react-icons/gr";
 import { NavLink, Outlet } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 
 function Adminlayout() {
-    const {setIsAdmin, navigate,theme,ToggleTheme} = useAppContext();
+    const {navigate,theme,ToggleTheme} = useAppContext();
     const AdminManu = [
         {name:"Add Product", link:'/admin',icon:<MdOutlineAddBusiness />},
         {name:"Product List", link:'/admin/product-list',icon:<IoList />},
@@ -16,8 +18,17 @@ function Adminlayout() {
     ]
 
     const logout = async () =>{
-    setIsAdmin(false);
-    navigate('/')
+    try {
+      const {data} = await axios.get('/api/admin/logout');
+      if(data.success){
+         toast.success(data.messsage || 'Logged out successfully');
+         navigate('/')
+      }else{
+         toast.error(data.message || 'Unable to logout');
+      }
+    } catch (error) {
+      toast.error(error.messsage);
+    }
     }
   return (
     <>
@@ -31,7 +42,7 @@ function Adminlayout() {
              <span onClick={ToggleTheme} className='text-2xl cursor-pointer dark:text-white'>
                 {theme === 'light' ?<MdDarkMode/> : <MdOutlineLightMode/> }
              </span>
-             <button onClick={()=>logout()} className='text-red-600 rounded-4xl border border-red-600 px-3 py-1 cursor-pointer hover:bg-red-100/70'>Logout</button>
+             <button onClick={logout} className='text-red-600 rounded-4xl border border-red-600 px-3 py-1 cursor-pointer hover:bg-red-100/70'>Logout</button>
          </div>
     </div>
     </div>
