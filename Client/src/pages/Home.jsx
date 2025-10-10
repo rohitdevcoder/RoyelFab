@@ -8,8 +8,11 @@ import OurClient from '../components/OurClient';
 import ContactBox from '../components/ContactBox';
 import InternationalClient from '../components/InternationalClient';
 import FaqSection from '../components/FaqSection';
+import ProductCart from '../components/ProductCart';
+import { useAppContext } from '../context/AppContext';
 
 function Home() {
+  const {products,navigate} = useAppContext();
   const TestimonialItems = [
   {
   icon :<BsPeopleFill/>,
@@ -73,7 +76,15 @@ function Home() {
     {/* ------Home about end------------- */}
      
      {/* ---------our Product Section-------- */}
-      <OurProducts/>
+      <div className='max-w-7xl mx-auto py-[60px] px-3 flex flex-col items-center gap-5'>
+      <h1 className='text-secondary text-center text-2xl font-bold'>Our <span className='text-primary dark:text-white'>Products</span></h1>
+    <div  className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 '>
+    {products && products.filter((product)=>product.inStrock).slice(0,4).map((item,index)=>(
+      <ProductCart key={index} product={item}/>
+    ))}
+    </div>
+         <button onClick={()=>{navigate('/product'),scrollTo(0,0)}} className=' py-[10px] px-[20px]  bg-primary dark:bg-secondary text-white font-medium rounded cursor-pointer mt-6'>View More</button>
+    </div>
      {/* ---------our Product Section end-------- */}
 
      <WhyChoose/>

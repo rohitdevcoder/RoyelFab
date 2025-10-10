@@ -48,7 +48,7 @@ function Adminlayout() {
     </div>
     
     {/* Sidebar */}
-    <div className='flex'>
+    <div className='flex dark:bg-darkBg'>
      <div className='w-16 md:w-64 flex flex-col border-r-2 border-secondary h-[95vh] gap-3 dark:bg-darkBg py-10 items-center fixed'>
      {AdminManu.map((item)=>(
         <NavLink to={item.link} key={item.name} end={item.link==='/admin'} 

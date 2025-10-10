@@ -7,24 +7,46 @@ import toast from 'react-hot-toast';
 
 
 function ProductDetailPage() {
-    const {products,navigate} = useAppContext();
+    const {products,navigate,axios} = useAppContext();
     const {id} = useParams();
     const product = products.find((item)=>item._id === id);
 
     const [thumbnail, setThumbnail] = useState(null);
-    const [relatedProducts, setRelatedProducts] = useState([]);
     const [sideForm,OpenSideForm] = useState(false);
     const [name,setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [city, setCity] = useState('');
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [relatedProducts, setRelatedProducts] = useState([]);
 
-    useEffect(() => {
-      let productCopy = products.slice();
-      productCopy = productCopy.filter((item) => item.category === product.category && item._id !== product._id);
-      setRelatedProducts(productCopy)
-    }, [products])
+
+    // Fetch related products based on category
+ const fetchRelatedProducts = () =>{
+   if (products.length>0 && product?.category) {
+    let relatedItems = products.filter(
+  (item) => item.category.toLowerCase() === product.category.toLowerCase() && item._id !== product._id).slice(0, 4);
+   setRelatedProducts(relatedItems);
+  }
+ }
+
+useEffect(() => {
+fetchRelatedProducts();
+}, [products,product])
+
+    // useEffect(() => {
+    //   let productCopy = products.slice();
+    //   productCopy =  productCopy.filter((item) => product.category === item.category);
+    //   setRelatedProducts(productCopy)
+    // }, [products])
+
+    // useEffect(() => {
+    //   let productCopy = products.slice();
+    //   productCopy =  products.filter((item) => item.category.toLowerCase() === product.category.toLowerCase() && item._id !== product._id);
+    //   setRelatedProducts(productCopy)
+    // }, [products,product])
+
     
     useEffect(()=>{
         setThumbnail(product?.image?product.image[0]:null)
@@ -34,20 +56,54 @@ function ProductDetailPage() {
         OpenSideForm(!sideForm);
     }
 
-    const onSubmitFormHandler = (e) =>{
+    const onSubmitFormHandler = async(e) =>{
         e.preventDefault();
-        
-        if(!name || !email || !phone || !city ){
-         toast.error("Please fill all the required fields")
-        }else{
+        setLoading(true);
+        try {
+            if(!name || !email || !phone || !city ){
+            toast.error("Please fill all the required fields")
+            setLoading(false);
+            return;
+        }
+        const {data} = await axios.post('/api/order/place-order',{
+            product_name: product.name,
+            name,
+            email,
+            mobile:phone,
+            city,
+            message
+        })  
+        if(data?.success){
+            toast.success(data?.message || "Thank you we will contact you soon!")
+            setLoading(false);
         OpenSideForm(!sideForm);
         setName('');
         setEmail('');
         setPhone('');
         setCity('');
         setMessage('');
-        toast.success("Thank you we will contact you soon!")
+        }else{
+            toast.error(data?.message || "Unable to place the order")
+            setLoading(false);
         }
+        } catch (error) {
+            toast.error(error.message);
+        }finally{
+            setLoading(false);
+        }
+
+        
+        // if(!name || !email || !phone || !city ){
+        //  toast.error("Please fill all the required fields")
+        // }else{
+        // OpenSideForm(!sideForm);
+        // setName('');
+        // setEmail('');
+        // setPhone('');
+        // setCity('');
+        // setMessage('');
+        // toast.success("Thank you we will contact you soon!")
+        // }
     }
 
   return product && (
@@ -95,7 +151,7 @@ function ProductDetailPage() {
         <p className='text-primary text-[1.3rem] font-semibold dark:text-secondary'>Message</p>
         <textarea rows={3} type="text" placeholder='Enter Your Message' onChange={(e)=>setMessage(e.target.value)} value={message} className='w-full mt-1.5 py-2 px-3 border-2 border-gray-300 outline-secondary dark:text-white rounded'/>
     </div>
-    <button className='py-3 bg-primary mt-5 rounded text-white cursor-pointer'>Submit</button>
+    <button className='py-3 bg-primary mt-5 rounded text-white cursor-pointer'>{loading?"Submitting...":"Submit"}</button>
     </form>
     </div>
     </div>
@@ -134,7 +190,7 @@ function ProductDetailPage() {
         <div className='py-[60px]'>
          <h1 className='text-2xl sm:text-3xl font-semibold text-primary dark:text-secondary'>Related Products</h1>
          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-5'>
-          {relatedProducts && relatedProducts.filter((item)=>item.inStock).map((item,index)=>(
+          {relatedProducts && relatedProducts.filter((item)=>item.inStrock).map((item,index)=>(
             <ProductCart key={index} product={item}/>
           ))}
          </div>

@@ -1,12 +1,13 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom"
-import { ProductDetails } from "../assets/Asset";
+// import { ProductDetails } from "../assets/Asset";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 
+export const AppContext = createContext();
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
-export const AppContext = createContext();
 
 export const AppContextProvider = ({children})=>{
   const [theme,setTheme] = useState(localStorage.getItem('theme') || 'light');
@@ -15,25 +16,50 @@ export const AppContextProvider = ({children})=>{
   const [products,setProducts] = useState([])
   const [isAdmin,setIsAdmin] = useState(false);
   const [showLogin, setShowLogin] = useState(false)
+  const [orders, setOrders] = useState([]);
 
 
   const fetchAdmin = async ()=>{
     try {
-      const {data} = await axios.get('/api/admin/is-auth');
+      const {data} = await axios.get('/api/admin/is-auth',{withCredentials:true});
       if(data.success){
         setIsAdmin(true);
       }else{
         setIsAdmin(false)
       }
     } catch (error) {
+      // console.error("Admin check failed:", error.response?.data || error.message);
       setIsAdmin(false);
     }
   }
 
 
   const fetchProducts = async() =>{
-    setProducts(ProductDetails);
+    try {
+      const {data} = await axios.get('/api/product/list')
+      if(data.success){
+        setProducts(data.products)
+      }else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
+
+  const fetchOrders =  async () =>{
+    try {
+      const {data} = await axios.get('api/order/get-orders');
+      if(data.success){
+        setOrders(data.orderDatas);
+      }else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
   useEffect(()=>{
     const root = window.document.documentElement;
     root.classList.remove('light' , 'dark');
@@ -41,16 +67,22 @@ export const AppContextProvider = ({children})=>{
     localStorage.setItem('theme', theme);
   },[theme])
 
-  useEffect(()=>{
-    fetchProducts();
-  })
   const ToggleTheme = ()=>{
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   }
 
+
   useEffect(()=>{
-    fetchAdmin();
-  })
+    fetchProducts();
+    // fetchAdmin();
+    fetchOrders();
+  },[])
+
+  useEffect(()=>{
+    if(!isAdmin){
+     fetchAdmin();
+   }
+  },[isAdmin])
 
   const value ={
        theme,
@@ -64,7 +96,9 @@ export const AppContextProvider = ({children})=>{
        setIsAdmin,
        showLogin,
        setShowLogin,
-       axios
+       axios,
+       orders,
+       fetchOrders
   }
 
   //App context provider

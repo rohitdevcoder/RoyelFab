@@ -8,10 +8,14 @@ import productRouter from './route/productRouter.js';
 import cors from 'cors'
 import formRouter from './route/formRouter.js';
 import orderRouter from './route/orderRouter.js';
+import connectCloudinary from './config/cloudinary.js';
+// import dotenv from 'dotenv'
 
 const app = express();
 const port = process.env.PORT || 4000;
-connectDB();
+// dotenv.config();
+await connectDB();
+await connectCloudinary();
 
 const allowOrigin = ['http://localhost:5173']
 app.use(express.json());
