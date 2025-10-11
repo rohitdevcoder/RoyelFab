@@ -17,10 +17,10 @@ const port = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
-const allowOrigin = ['http://localhost:5173']
+// const allowOrigin = ['http://localhost:5173']
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin:allowOrigin,credentials:true}))
+app.use(cors({origin:process.env.CORS_ALLOW_ORIGIN,credentials:true}))
 
 
 app.get('/',(req,res)=>{
