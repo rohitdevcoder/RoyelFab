@@ -74,15 +74,10 @@ export const AppContextProvider = ({children})=>{
 
   useEffect(()=>{
     fetchProducts();
-    // fetchAdmin();
+    fetchAdmin();
     fetchOrders();
   },[])
 
-  useEffect(()=>{
-    if(!isAdmin){
-     fetchAdmin();
-   }
-  },[isAdmin])
 
   const value ={
        theme,

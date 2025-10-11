@@ -11,6 +11,9 @@ import AboutUsBanner from "./About_Us_Hero.png";
 import OurProducts from './Our_Products.png'
 import OurProductBanner from './Our_Product_Banner.png'
 import UploadArea from './UploadArea.png'
+import CompanyLogo from './comapny_logo.jpg'
+import Aditya from './Aditya.png'
+import About from './About.jpg'
 
 export const Assets = {
     Logo,
@@ -24,7 +27,10 @@ export const Assets = {
     AboutUsBanner,
     OurProducts,
     OurProductBanner,
-    UploadArea
+    UploadArea,
+    CompanyLogo,
+    Aditya,
+    About
 };
 
 export const ProductDetails = [
