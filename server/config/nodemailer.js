@@ -17,13 +17,15 @@ const transporter = nodemailer.createTransport({
 });
 
 // Verify the connection configuration
-transporter.verify(function(error, success) {
-  if (error) {
-    console.log('Nodemailer configuration error:', error.message);
-  } else {
-    console.log("Nodemailer is ready to send emails");
-  }
-});
+if (process.env.NODE_ENV !== 'production') {
+    transporter.verify(function(error, success) {
+      if (error) {
+        console.log('Nodemailer configuration error:', error.message);
+      } else {
+        console.log("Server is ready to take our messages");
+      }
+    });
+}
 
 
 // Export the transporter object
