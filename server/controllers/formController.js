@@ -33,8 +33,8 @@ try {
             };
 
             // Send the email
-            await transporter.sendMail(mailOptions);
-            console.log('Notification email sent successfully.');
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Notification email sent successfully. Message ID:', info.messageId);
 
         } catch (emailError) {
             // If email sending fails, log the error but don't block the user.
