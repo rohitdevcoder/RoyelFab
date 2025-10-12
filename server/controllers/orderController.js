@@ -10,9 +10,10 @@ export const placeOrder = async (req, res)=>{
             return res.status(400).json({success:false,message:"All fields are required except message"});
         }
         await Order.create({product_name,name,email,mobile,city,message});
-
+        
+        return res.status(201).json({success:true,message:"Order placed successfully"})
             // Nodemailer logic can be added here to send an email notification
-      try {
+
             // Define the email content
             const mailOptions = {
                 from: `"Royel Fab" <contact@royelfab.com>`, // Sender address
@@ -35,16 +36,24 @@ export const placeOrder = async (req, res)=>{
             };
 
             // Send the email
-            await transporter.sendMail(mailOptions);
-            console.log('Notification email sent successfully.');
+            // await transporter.sendMail(mailOptions);
+            // console.log('Notification email sent successfully.');
 
-        } catch (emailError) {
-            // If email sending fails, log the error but don't block the user.
-            // The form data was already saved successfully.
-            console.error('Error sending notification email:', emailError.message);
-        }
+        // } catch (emailError) {
+        //     // If email sending fails, log the error but don't block the user.
+        //     // The form data was already saved successfully.
+        //     console.error('Error sending notification email:', emailError.message);
+        // }
+          transporter.sendMail(mailOptions)
+            .then(info => {
+                console.log(`Notification email sent for order by ${name}: ${info.messageId}`);
+            })
+            .catch(emailError => {
+                // Log the error for debugging, but the user has already received a success response.
+                // You could add more robust logging here (e.g., to a file or a logging service).
+                console.error(`Failed to send notification email for order by ${name}:`, emailError.message);
+            });
 
-        return res.status(201).json({success:true,message:"Order placed successfully"})
     } catch (error) {
       console.log(error.message);
       return res.status(500).json({success:false,message:error.message});  
