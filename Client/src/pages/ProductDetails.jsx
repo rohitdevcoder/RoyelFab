@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 
 function ProductDetailPage() {
-    const {products,navigate,axios} = useAppContext();
+    const {products,navigate,axios,fetchOrders} = useAppContext();
     const {id} = useParams();
     const product = products.find((item)=>item._id === id);
 
@@ -82,6 +82,7 @@ fetchRelatedProducts();
         setPhone('');
         setCity('');
         setMessage('');
+        fetchOrders();
         }else{
             toast.error(data?.message || "Unable to place the order")
             setLoading(false);

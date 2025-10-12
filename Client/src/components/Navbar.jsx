@@ -46,7 +46,7 @@ function Navbar() {
       </div>
       
        
-       <nav className= 'flex flex-col items-left  list-none gap-5 font-semibold mr-auto dark:text-white'>
+       <nav className= 'flex flex-col items-left text-[1.4rem]  list-none gap-5 font-semibold mr-auto dark:text-white'>
            {navMenuItem.map((item,index)=>(
            <li key={index} onClick={()=>{scrollTo(0,0),setNavActive(item.name)}}><Link className={`${navActive===item.name? 'text-secondary' : ''}`} onClick={handleMobileMenu} to={item.link}>{item.name}</Link></li>
            ))}
@@ -62,7 +62,7 @@ function Navbar() {
 
     {/* //Decsktop Navbar */}
     {/* <div className='relative'> */}
-    <header className='fixed w-full top-0 left-0 p-3.5 z-50 shadow-xl bg-white dark:bg-darkBg'>
+    <header className='fixed w-full top-0 left-0 p-3.5 z-50 shadow bg-white dark:bg-darkBg'>
         <div className='max-w-7xl  mx-auto flex ' >
          <div className='flex'>
             <h1 onClick={()=>{navigate('/'),scrollTo(0,0)}} className='text-primary nextScreen dark:text-white text-3xl font-bold cursor-pointer leading-tight'>Royel <span className='text-secondary'>Fab.</span></h1>
