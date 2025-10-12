@@ -16,7 +16,7 @@ function About() {
         </div>
         <div className='w-full lg:w-[50%]'>
           <h1 className='text-2xl text-secondary font-bold mb-4'>Welcome to <span className='text-primary dark:text-white'>Royel Fab.</span></h1>
-        <p>
+        <p className='dark:text-white'>
         At Royel Fab, we specialize in the manufacturing and export of high-quality hubless cast iron pipes and fittings. Our products are designed to meet the rigorous demands of modern plumbing and drainage systems, ensuring durability, reliability, and ease of installation. With a commitment to excellence and customer satisfaction, we have established ourselves as a trusted name in the industry, serving clients both domestically and internationally.
         
         <br/>

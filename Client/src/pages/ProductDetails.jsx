@@ -164,14 +164,14 @@ fetchRelatedProducts();
             </span>
         <div className='flex flex-col md:flex-row gap-10 justify-center items-center'>
             <div className='flex gap-3 p-3'>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-2 w-[20%]'>
             {product.image.map((item,index)=>(
                 <div key ={index} onClick={()=>setThumbnail(item)} className='overflow-hidden max-w-24 border-1 border-gray-400 rounded'>
                  <img src={item} alt={`product_${index+1}`} />
                 </div>
             ))}
             </div>
-            <div className='max-w-100 border-1 border-gray-400 rounded overflow-hidden'>
+            <div className='max-w-100 border-1 border-gray-400 rounded overflow-hidden w-[80%]'>
                 <img src={thumbnail} alt="Product_Thumbnail" />
             </div>
             </div>
@@ -187,7 +187,7 @@ fetchRelatedProducts();
         </div>
 
         {/* Related Products  */}
-        <div className='py-[60px]'>
+        <div className='py-[60px] p-3'>
          <h1 className='text-2xl sm:text-3xl font-semibold text-primary dark:text-secondary'>Related Products</h1>
          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-5'>
           {relatedProducts && relatedProducts.filter((item)=>item.inStrock).map((item,index)=>(
