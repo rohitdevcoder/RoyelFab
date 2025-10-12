@@ -22,7 +22,7 @@ function Contact() {
         setLoading(false);
         return;
       }
-      const {data} = await axios.post('api/form/submit',{name,email,subject,message})
+      const {data} = await axios.post('/api/form/submit',{name,email,subject,message})
       if(data?.success){
         toast.success('Form submitted successfully');
     setName('');

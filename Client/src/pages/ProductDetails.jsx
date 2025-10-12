@@ -73,8 +73,8 @@ fetchRelatedProducts();
             city,
             message
         })  
-        if(data?.success){
-            toast.success(data?.message || "Thank you we will contact you soon!")
+        if(data.success){
+            toast.success(data.message || "Thank you we will contact you soon!")
             setLoading(false);
         OpenSideForm(!sideForm);
         setName('');
