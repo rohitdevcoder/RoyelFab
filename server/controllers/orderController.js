@@ -11,10 +11,8 @@ export const placeOrder = async (req, res)=>{
         }
         await Order.create({product_name,name,email,mobile,city,message});
         
-        return res.status(201).json({success:true,message:"Order placed successfully"})
             // Nodemailer logic can be added here to send an email notification
-
-            // Define the email content
+            try{
             const mailOptions = {
                 from: `"Royel Fab" <contact@royelfab.com>`, // Sender address
                 to: process.env.RECEIVER_EMAIL, // Your admin email where you want to receive notifications
@@ -36,23 +34,16 @@ export const placeOrder = async (req, res)=>{
             };
 
             // Send the email
-            // await transporter.sendMail(mailOptions);
-            // console.log('Notification email sent successfully.');
+            await transporter.sendMail(mailOptions);
+            console.log('Notification email sent successfully.');
+        return res.status(201).json({success:true,message:"Order placed successfully"})
 
-        // } catch (emailError) {
-        //     // If email sending fails, log the error but don't block the user.
-        //     // The form data was already saved successfully.
-        //     console.error('Error sending notification email:', emailError.message);
-        // }
-          transporter.sendMail(mailOptions)
-            .then(info => {
-                console.log(`Notification email sent for order by ${name}: ${info.messageId}`);
-            })
-            .catch(emailError => {
-                // Log the error for debugging, but the user has already received a success response.
-                // You could add more robust logging here (e.g., to a file or a logging service).
-                console.error(`Failed to send notification email for order by ${name}:`, emailError.message);
-            });
+
+        } catch (emailError) {
+            // If email sending fails, log the error but don't block the user.
+            // The form data was already saved successfully.
+            console.error('Error sending notification email:', emailError.message);
+        }
 
     } catch (error) {
       console.log(error.message);
